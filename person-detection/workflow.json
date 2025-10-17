@@ -1,0 +1,20 @@
+{
+    "StartAt": "Resize",
+    "States": {
+      "Resize": {
+        "Type": "Task",
+        "Resource": "resize",
+        "Next": "Detection"
+      },
+      "Detection": {
+        "Type": "Task",
+        "Resource": "yoloFunc",
+        "Next": "Crop"
+      },
+      "Crop": {
+        "Type": "Task",
+        "Resource": "cropFunc",
+        "End": true
+      }
+    }
+  }
