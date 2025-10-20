@@ -6,3 +6,4 @@ Serverledge.
 ## Workflows
 
  - [Detecting people in images](./person-detection/)
+ - [LLM-based weather forecast report](./weather/)
