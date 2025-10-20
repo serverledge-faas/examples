@@ -7,3 +7,4 @@ Serverledge.
 
  - [Detecting people in images](./person-detection/)
  - [LLM-based weather forecast report](./weather/)
+ - [Sentiment analysis on the Amazon Review dataset](./sentiment-analysis/)
