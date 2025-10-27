@@ -9,11 +9,26 @@
       "Detection": {
         "Type": "Task",
         "Resource": "yoloFunc",
-        "Next": "Crop"
+        "Next": "ChoiceState"
+      },
+      "ChoiceState": {
+        "Type": "Choice",
+        "Choices": [
+          {
+            "Variable": "$.Count",
+            "NumericGreaterThanEquals": 1,
+            "Next": "Crop"
+          }
+        ],
+        "Default": "Done"
       },
       "Crop": {
         "Type": "Task",
         "Resource": "cropFunc",
+        "End": true
+      },
+      "Done": {
+        "Type": "Succeed",
         "End": true
       }
     }

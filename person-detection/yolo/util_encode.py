@@ -49,7 +49,9 @@ def encode_image_with_data_url(image_path):
 
 
 if __name__ == "__main__":
-    image_path = "image.jpg"
+    import sys
+
+    image_path = sys.argv[1] if len(sys.argv) > 1 else "image.jpg"
     
     # Encode image to base64
     base64_str = encode_image_to_base64(image_path)
