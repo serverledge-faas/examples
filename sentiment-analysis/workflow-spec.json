@@ -34,22 +34,16 @@
       "Comment": "The training task of the low-accuracy sentiment analysis model",
       "Type": "Task",
       "Resource": "sa_train",
-      "Next": "LAEvaluateFinalState"
-    }, 
-    "LAEvaluateFinalState": {
-      "Comment": "The final task of the low-accuracy sentiment analysis model",
-      "Type": "Task",
-      "Resource": "sa_evaluate",
-      "End": true
+      "Next": "EvaluateFinalState"
     }, 
     "HATrainState": {
       "Comment": "The training task of the high-accuracy sentiment analysis model",
       "Type": "Task",
       "Resource": "sa_train",
-      "Next": "HAEvaluateFinalState"
+      "Next": "EvaluateFinalState"
     }, 
-    "HAEvaluateFinalState": {
-      "Comment": "The final task of the high-accuracy sentiment analysis model",
+    "EvaluateFinalState": {
+      "Comment": "The evaluation task of the sentiment analysis model",
       "Type": "Task",
       "Resource": "sa_evaluate",
       "End": true
