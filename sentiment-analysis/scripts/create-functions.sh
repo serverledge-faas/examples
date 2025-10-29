@@ -1,5 +1,8 @@
-#!/bin/bash
-../../../bin/serverledge-cli create --function sa_retrieve \
+#!/usr/bin/env bash
+
+SERVERLEDGE_CLI="${1:-../../../serverledge/bin/serverledge-cli}"
+
+"$SERVERLEDGE_CLI" create --function sa_retrieve \
     --memory 256 \
     --runtime custom \
     --custom_image sa-sentiment-analysis-retrieve \
@@ -12,7 +15,7 @@
     --output "object_name:Text"
 
 
-../../../bin/serverledge-cli create --function sa_extract \
+"$SERVERLEDGE_CLI" create --function sa_extract \
     --memory 256 \
     --runtime custom \
     --custom_image sa-sentiment-analysis-extract \
@@ -28,7 +31,7 @@
 
 
 
-../../../bin/serverledge-cli create --function sa_train \
+"$SERVERLEDGE_CLI" create --function sa_train \
     --memory 1024 \
     --runtime custom \
     --custom_image sa-sentiment-analysis-train \
@@ -46,7 +49,7 @@
 
 
 
-../../../bin/serverledge-cli create --function sa_evaluate \
+"$SERVERLEDGE_CLI" create --function sa_evaluate \
     --memory 512 \
     --runtime custom \
     --custom_image sa-sentiment-analysis-evaluate \
