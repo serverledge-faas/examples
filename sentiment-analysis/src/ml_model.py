@@ -170,7 +170,12 @@ def handler_train(params, _):
     except:
         local_train_file = TRAIN_DATA_FILE
     
-    if minio_client.exists(output_model_object):
+    client = minio_client.MinIoClient(params["minio_endpoint"], 
+                                    params["minio_access_key"], 
+                                    params["minio_secret_key"])
+
+
+    if client.exists(output_model_object):
         print("> Model already exists!")
         return {"status" : "already existing",
                 "model_object_name" : output_model_object, 
@@ -179,7 +184,7 @@ def handler_train(params, _):
     _local_train_file = Path(local_train_file)
     if not _local_train_file.exists():
         print("> Downloading training data from MinIO")   
-        ret = minio_client.download_file(train_object_data, local_train_file)
+        ret = client.download_file(train_object_data, local_train_file)
         if not ret: 
             raise Exception("Error while downloading training data.")
     else:
@@ -192,8 +197,8 @@ def handler_train(params, _):
     save_model(model=model, vectorizer=vectorizer, model_filepath = local_model_file, vectorizer_filepath=local_vectorizer_file)
 
     print(f"> Uploading model to MinIO: [{output_model_object}, {output_vectorizer_object}]")
-    minio_client.upload_file(local_model_file, output_model_object)
-    minio_client.upload_file(local_vectorizer_file, output_vectorizer_object)
+    client.upload_file(local_model_file, output_model_object)
+    client.upload_file(local_vectorizer_file, output_vectorizer_object)
     
     return {"status" : "ok",
             "model_object_name" : output_model_object,
@@ -244,10 +249,14 @@ def handler_evaluate(params, _):
     except:
         local_test_file = TEST_DATA_FILE
 
+    client = minio_client.MinIoClient(params["minio_endpoint"], 
+                                        params["minio_access_key"], 
+                                        params["minio_secret_key"])
+
     _local_test_file = Path(local_test_file)
     if not _local_test_file.exists():
         print(f"> Downloading testing data: {test_object_data} -> {local_test_file}")
-        ret = minio_client.download_file(test_object_data, local_test_file)
+        ret = client.download_file(test_object_data, local_test_file)
         if not ret: 
             raise Exception("> Error while downloading testing data.")
     else:
@@ -256,11 +265,11 @@ def handler_evaluate(params, _):
     _local_model_files = Path(local_model_file)
     if not _local_model_files.exists():
         print(f"> Downloading model from MinIO: [{model_object}, {vectorizer_object}]")
-        ret = minio_client.download_file(model_object, local_model_file)
+        ret = client.download_file(model_object, local_model_file)
         if not ret: 
             raise Exception("> Error while downloading model object.")
         
-        ret = minio_client.download_file(vectorizer_object, local_vectorizer_file)
+        ret = client.download_file(vectorizer_object, local_vectorizer_file)
         if not ret: 
             raise Exception("> Error while downloading vectorizer object.")
     else:
