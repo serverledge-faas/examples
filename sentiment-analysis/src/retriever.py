@@ -37,4 +37,4 @@ def handler(data_url, local_temp_path, object_name):
         
     downlaoded = retrieve(data_url, output=local_temp_path)
     uploaded = upload_to_minio(local_temp_path, object_name=object_name)
-    return {"status": "ok", "local_download": downlaoded, "uploaded": uploaded, "object": object_name}
+    return {"status": "ok", "local_download": downlaoded, "uploaded": uploaded, "object_name": object_name}
