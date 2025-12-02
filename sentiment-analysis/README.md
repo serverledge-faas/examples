@@ -48,19 +48,19 @@ To run MinIO using docker containers, run:
 
 This SA workflow comes with a `Dockerfile`, which simplifies the application deployment. 
 The Dockerfile enables building the container image of the different tasks, through an environment variable `HANDLER_ENV`.
- * HANDLER_ENV="retrieve": to build the image for the retriever `sa-sentiment-analysis-retrieve`;
- * HANDLER_ENV="extract": to build the image for the extractor `sa-sentiment-analysis-extract`; 
- * HANDLER_ENV="train": to build the image for the training tasks `sa-sentiment-analysis-train`;
- * HANDLER_ENV="evaluate": to build the image for the evaluation tasks `sa-sentiment-analysis-evaluate`.
+ * HANDLER_ENV="retrieve": to build the image for the retriever `sa-retrieve`;
+ * HANDLER_ENV="extract": to build the image for the extractor `sa-extract`; 
+ * HANDLER_ENV="train": to build the image for the training tasks `sa-train`;
+ * HANDLER_ENV="evaluate": to build the image for the evaluation tasks `sa-evaluate`.
 
 
 To build the container, run the following command:
 
     cd ./src
-    docker build --build-arg HANDLER_ENV="retrieve" -t sa-sentiment-analysis-retrieve .      
-    docker build --build-arg HANDLER_ENV="extract" -t sa-sentiment-analysis-extract .      
-    docker build --build-arg HANDLER_ENV="train" -t sa-sentiment-analysis-train .      
-    docker build --build-arg HANDLER_ENV="evaluate" -t sa-sentiment-analysis-evaluate .      
+    docker build --build-arg HANDLER_ENV="retrieve" -t  sa-retrieve .      
+    docker build --build-arg HANDLER_ENV="extract" -t  sa-extract .      
+    docker build --build-arg HANDLER_ENV="train" -t  sa-train .      
+    docker build --build-arg HANDLER_ENV="evaluate" -t  sa-evaluate .      
 
 ## Launch the Server 
 The SA workflow creates an HTTP Server that executes different functions according to the received REST call. 
@@ -72,6 +72,9 @@ POST localhost:8080/invoke
 
     {
         "Params" : {
+            "minio_endpoint": "172.17.0.1:9000",
+            "minio_access_key": "minio",
+            "minio_secret_key": "minio123",
             "data_url": "https://s3.amazonaws.com/fast-ai-nlp/amazon_review_polarity_csv.tgz", 
             "local_dir": "./amazon_review_polarity_csv.tgz", 
             "object_name": "raw/amazon_review_polarity_csv.tgz"
@@ -85,6 +88,9 @@ POST localhost:8080/invoke
 
     {
         "Params" : {
+            "minio_endpoint": "172.17.0.1:9000",
+            "minio_access_key": "minio",
+            "minio_secret_key": "minio123",
             "tgz_input_object_name": "data/test.csv",
             "subset" : 0.002,
             "local_dataset_file": "./amazon_review_polarity_csv.tgz", 
@@ -101,6 +107,9 @@ POST localhost:8080/invoke
 
     {
       "Params" : {
+          "minio_endpoint": "172.17.0.1:9000",
+          "minio_access_key": "minio",
+          "minio_secret_key": "minio123",
           "subset": 0.001, 
           "max_features": 2, 
           "train_object_data": "data/train.csv", 
@@ -118,6 +127,9 @@ POST localhost:8080/invoke
 
     {
         "Params" : {
+            "minio_endpoint": "172.17.0.1:9000",
+            "minio_access_key": "minio",
+            "minio_secret_key": "minio123",
             "test_object_data": "data/test.csv", 
             "local_test_file": "test.csv", 
             "subset": 0.0002, 
