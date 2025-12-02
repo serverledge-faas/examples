@@ -5,11 +5,14 @@ SERVERLEDGE_CLI="${1:-../../../serverledge/bin/serverledge-cli}"
 "$SERVERLEDGE_CLI" create --function sa_retrieve \
     --memory 256 \
     --runtime custom \
-    --custom_image sa-sentiment-analysis-retrieve \
+    --custom_image sa-retrieve \
+    --input "minio_endpoint:Text" \
+    --input "minio_access_key:Text" \
+    --input "minio_secret_key:Text" \
     --input "data_url:Text" \
     --input "local_dir:Text" \
     --input "object_name:Text" \
-    --output "status:Text" \ 
+    --output "status:Text" \
     --output "local_download:Bool" \
     --output "uploaded:Bool" \
     --output "object_name:Text"
@@ -18,7 +21,10 @@ SERVERLEDGE_CLI="${1:-../../../serverledge/bin/serverledge-cli}"
 "$SERVERLEDGE_CLI" create --function sa_extract \
     --memory 256 \
     --runtime custom \
-    --custom_image sa-sentiment-analysis-extract \
+    --custom_image sa-extract \
+    --input "minio_endpoint:Text" \
+    --input "minio_access_key:Text" \
+    --input "minio_secret_key:Text" \
     --input "tgz_input_object_name:Text" \
     --input "subset:Float" \
     --input "local_dataset_file:Text" \
@@ -34,7 +40,10 @@ SERVERLEDGE_CLI="${1:-../../../serverledge/bin/serverledge-cli}"
 "$SERVERLEDGE_CLI" create --function sa_train \
     --memory 1024 \
     --runtime custom \
-    --custom_image sa-sentiment-analysis-train \
+    --custom_image sa-train \
+    --input "minio_endpoint:Text" \
+    --input "minio_access_key:Text" \
+    --input "minio_secret_key:Text" \
     --input "subset:Float" \
     --input "max_features:Int" \
     --input "train_object_data:Text" \
@@ -52,7 +61,10 @@ SERVERLEDGE_CLI="${1:-../../../serverledge/bin/serverledge-cli}"
 "$SERVERLEDGE_CLI" create --function sa_evaluate \
     --memory 512 \
     --runtime custom \
-    --custom_image sa-sentiment-analysis-evaluate \
+    --custom_image sa-evaluate \
+    --input "minio_endpoint:Text" \
+    --input "minio_access_key:Text" \
+    --input "minio_secret_key:Text" \
     --input "test_object_data:Text" \
     --input "local_test_file:Text" \
     --input "subset:Float" \
