@@ -2,7 +2,7 @@ import base64
 import time
 import io
 from PIL import Image
-import minioclient
+import minio_client
 
 
 def extract_person_crops(base64_string, person_bboxes, padding=0):
@@ -53,7 +53,7 @@ def extract_person_crops(base64_string, person_bboxes, padding=0):
     return cropped_images
 
 
-def save_person_crops(base64_string, person_bboxes, output_prefix="person", padding=0):
+def save_person_crops(minio_conf, base64_string, person_bboxes, output_prefix="person", padding=0):
     """
     Extract and save cropped images for each person bounding box.
     
@@ -68,7 +68,11 @@ def save_person_crops(base64_string, person_bboxes, output_prefix="person", padd
     """
     cropped_images = extract_person_crops(base64_string, person_bboxes, padding)
 
-    minioclient.ensure_bucket()
+    client = minio_client.MinIoClient(minio_conf["endpoint"], 
+                                      minio_conf["access_key"], 
+                                      minio_conf["secret_key"])
+                                        
+    client.ensure_bucket()
     
     saved_files = []
     for i, crop in enumerate(cropped_images, 1):
@@ -76,7 +80,7 @@ def save_person_crops(base64_string, person_bboxes, output_prefix="person", padd
         crop.save(filename, quality=95)
 
         object_name=str(time.time())+".jpg"
-        minioclient.upload_file(filename, object_name)
+        client.upload_file(filename, object_name)
         saved_files.append(object_name)
         print(f"Saved: {object_name}")
     
@@ -95,7 +99,12 @@ def handler (params, context):
 
     response = {}
 
-    objects = save_person_crops(img, boxes, output_prefix="person", padding=10)
+    minio_conf = {}
+    minio_conf["endpoint"] = params["minio_endpoint"] 
+    minio_conf["access_key"] = params["minio_access_key"]
+    minio_conf["secret_key"] = params["minio_secret_key"]
+
+    objects = save_person_crops(minio_conf, img, boxes, output_prefix="person", padding=10)
     
     response["Objects"] = objects
 
