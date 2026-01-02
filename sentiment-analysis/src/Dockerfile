@@ -4,7 +4,7 @@ FROM python:3.10-slim
 COPY requirements.txt /tmp/
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
-ENV MINIO_ENDPOINT="172.17.0.1:9000"
+ENV MINIO_ENDPOINT="160.80.97.154:9000"
 ENV MINIO_ACCESS_KEY=minio
 ENV MINIO_SECRET_KEY=minio123
 ENV MINIO_BUCKET=serverledge
