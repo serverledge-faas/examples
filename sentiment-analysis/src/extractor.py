@@ -74,8 +74,11 @@ def handler(params, _):
     except:
         subset = 1.0
         
+    client = minio_client.MinIoClient(params["minio_endpoint"], 
+                                      params["minio_access_key"], 
+                                      params["minio_secret_key"])
     # Check if final file already exists: 
-    if minio_client.exists(output_train_object_name):
+    if client.exists(output_train_object_name):
         print(f"> Train data already exists on MinIO: {output_train_object_name}")
         return {"status" : "already existing",
                 "train_object_name" : output_train_object_name, 
@@ -85,7 +88,7 @@ def handler(params, _):
     _local_dataset_file = Path(local_dataset_file)
     if not _local_dataset_file.exists():
         print(f"> Downloading dataset from MinIO: {tgz_input_object_name} -> {local_dataset_file}")
-        ret = minio_client.download_file(tgz_input_object_name, local_dataset_file)
+        ret = client.download_file(tgz_input_object_name, local_dataset_file)
         if not ret: 
             raise Exception("> Error while downloading testing data.")
     else:
@@ -119,10 +122,10 @@ def handler(params, _):
     
     # Upload files
     print(f"> Uploading train data to MinIO: {local_train_data} -> {output_train_object_name}]")
-    minio_client.upload_file(local_train_data, output_train_object_name)
+    client.upload_file(local_train_data, output_train_object_name)
 
     print(f"> Uploading test data to MinIO: {local_test_data} -> {output_test_object_name}]")
-    minio_client.upload_file(local_test_data, output_test_object_name)
+    client.upload_file(local_test_data, output_test_object_name)
     
     return {"status" : "ok",
                 "train_object_name" : output_train_object_name, 

@@ -27,6 +27,7 @@ Serverledge CLI executable):
 
     $CLI create -u -f cropFunc --memory 500 --runtime custom --custom_image cropfunc \
         --input "Img:Text" --input "Detections:ArrayText" --input "Count:Int" \
+        --input "minio_endpoint:Text" --input "minio_access_key:Text" --input "minio_secret_key:Text" \
             --output "Objects:ArrayText" 
 
     $CLI create-workflow -s workflow.json -f detection

@@ -59,7 +59,10 @@ class Executor(BaseHTTPRequestHandler):
                         "Params" : {
                             "data_url": "https://s3.amazonaws.com/fast-ai-nlp/amazon_review_polarity_csv.tgz", 
                             "local_dir": "./amazon_review_polarity_csv.tgz", 
-                            "object_name": "raw/amazon_review_polarity_csv.tgz"
+                            "object_name": "raw/amazon_review_polarity_csv.tgz",
+                            "minio_endpoint": "172.17.0.1:9000",
+                            "minio_access_key": "minio",
+                            "minio_secret_key": "minio123" 
                         }
                     }
                 '''
@@ -67,8 +70,14 @@ class Executor(BaseHTTPRequestHandler):
                 local_temp_dir = str(params.get("local_dir", OUTPUT_PATH))
                 data_object_name = str(params.get("object_name", OBJECT_NAME))
                 
+                minio_endpoint = str(params.get("minio_endpoint", "172.17.0.1:9000"))
+                minio_access_key  = str(params.get("minio_access_key", "minio"))
+                minio_secret_key = str(params.get("minio_secret_key", "minio123")) 
+                
                 print(f"Running function 'retriever' with params {data_url}, {local_temp_dir}, {data_object_name}")
-                result = retriever.handler(data_url=data_url, local_temp_path=local_temp_dir, object_name=data_object_name)
+                result = retriever.handler( 
+                                           minio_endpoint, minio_access_key, minio_secret_key,
+                                           data_url=data_url, local_temp_path=local_temp_dir, object_name=data_object_name)
 
             elif func == "train" or HANDLER_ENV.lower() == "train":
                 ''' Invocation example: 
@@ -77,6 +86,9 @@ class Executor(BaseHTTPRequestHandler):
                     {
                         "Function" : "train",
                         "Params" : {
+                            "minio_endpoint": "172.17.0.1:9000",
+                            "minio_access_key": "minio",
+                            "minio_secret_key": "minio123",
                             "subset": 0.001, 
                             "max_features": 2, 
                             "train_object_data": "data/train.csv", 
@@ -98,6 +110,9 @@ class Executor(BaseHTTPRequestHandler):
                     {
                         "Function" : "evaluate",
                         "Params" : {
+                            "minio_endpoint": "172.17.0.1:9000",
+                            "minio_access_key": "minio",
+                            "minio_secret_key": "minio123",
                             "test_object_data": "data/test.csv", 
                             "local_test_file": "test.csv", 
                             "subset": 0.0002, 
@@ -118,6 +133,9 @@ class Executor(BaseHTTPRequestHandler):
                     {
                         "Function" : "extract",
                         "Params" : {
+                            "minio_endpoint": "172.17.0.1:9000",
+                            "minio_access_key": "minio",
+                            "minio_secret_key": "minio123",
                             "tgz_input_object_name": "data/test.csv",
                             "subset" : 0.002,
                             "local_dataset_file": "./amazon_review_polarity_csv.tgz", 

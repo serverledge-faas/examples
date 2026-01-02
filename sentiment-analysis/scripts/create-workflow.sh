@@ -5,6 +5,9 @@ SERVERLEDGE_CLI="${1:-../../../serverledge/bin/serverledge-cli}"
 "$SERVERLEDGE_CLI" create-workflow -s ../workflow-spec.json -f sentiment-analysis
 
 "$SERVERLEDGE_CLI" invoke-workflow -f sentiment-analysis \
+    -p "minio_endpoint:172.17.0.1:9000" \
+    -p "minio_access_key:minio" \
+    -p "minio_secret_key:minio123" \
     -p "data_url:https://matteonardelli.it/resources/amazon_review_polarity_csv2.tgz" \
     -p "local_dir:./amazon_review_polarity_csv.tgz" \
     -p "object_name:raw/amazon_review_polarity_csv.tgz" \
