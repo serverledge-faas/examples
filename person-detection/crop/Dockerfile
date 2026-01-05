@@ -11,7 +11,7 @@ ENV MINIO_SECURE=false
 
 COPY executor.py /
 COPY function.py /
-COPY minioclient.py /
+COPY minio_client.py /
 
 WORKDIR /
 CMD python executor.py
