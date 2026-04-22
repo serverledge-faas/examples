@@ -75,7 +75,7 @@ def handler (params, context):
 
     response = {}
 
-    person_boxes = detect_objects_from_base64(img)
+    person_boxes = detect_objects_from_base64(img, model_path="yolov5nu.pt")
     
     response["Count"] = len(person_boxes)
     response["Detections"] = person_boxes

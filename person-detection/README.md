@@ -12,7 +12,7 @@ Start minIO:
 
 Create custom images for functions:
 
-    docker build -t yolofunc yolo/
+    docker build -t mobilenetssd mobilenet-ssd/
     docker build -t cropfunc crop/
     docker build -t resizefunc resize/
 
@@ -22,7 +22,7 @@ Serverledge CLI executable):
     $CLI create -u -f resize --memory 500 --runtime custom --custom_image resizefunc \
         --input "img:Text" --output "img:Text"
 
-    $CLI create -u -f yoloFunc --memory 900 --runtime custom --custom_image yolofunc \
+    $CLI create -u -f mobilenet --memory 900 --runtime custom --custom_image mobilenetssd \
         --input "img:Text" --output "Img:Text" --output "Detections:ArrayText" --output "Count:Int"
 
     $CLI create -u -f cropFunc --memory 500 --runtime custom --custom_image cropfunc \

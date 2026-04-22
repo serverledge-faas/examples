@@ -11,8 +11,12 @@ def handler (params, context):
 
     client = genai.Client(api_key=api_key)
 
+    LITE="gemini-3.1-flash-lite-preview"
+    GEMMA="gemma-3-27b-it"
+    FLASH="gemini-2.5-flash"
+
     gemini_response = client.models.generate_content(
-        model="gemini-2.5-flash", contents=prompt
+        model=GEMMA, contents=prompt
     )
     print(gemini_response.text)
 
