@@ -117,7 +117,8 @@ POST localhost:8080/invoke
           "local_model_file": "sentiment_model.pkl", 
           "local_vectorizer_file": "tfidf_vectorizer.pkl",
           "output_model_object": "model/sentiment_model.pkl", 
-          "output_vectorizer_object": "model/tfidf_vectorizer.pkl" 
+          "output_vectorizer_object": "model/tfidf_vectorizer.pkl",
+          "reuse_trained_model" : false
       }
     }
 

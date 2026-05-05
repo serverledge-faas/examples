@@ -29,4 +29,6 @@ SERVERLEDGE_CLI="${1:-../../../serverledge/bin/serverledge-cli}"
     -p "local_dataset_file:./amazon_review_polarity_csv.tgz" \
     -p "local_output_dir:./data" \
     -p "output_train_object_name:data/train.csv" \
-    -p "output_test_object_name:data/test.csv"
+    -p "output_test_object_name:data/test.csv"\
+    -p "reuse_trained_model:false"
+

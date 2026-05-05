@@ -127,6 +127,7 @@ def handler_train(params, _):
     - local_vectorizer_file: (string) local file used to store the vectorizer before uploading it to MinIO (default: 'tfidf_vectorizer.pkl')
     - output_model_object: (string) object name used to export the model on MinIO (default: 'model/sentiment_model.pkl')
     - output_vectorizer_object: (string) object name used to export the vectorizer on MinIO (default: 'model/tfidf_vectorizer.pkl')
+    - reuse_trained_model: (bool) circuit break if the model already exists on minio, and avoid training again (defailt: false)
     '''
 
     print("Training Sentiment Analysis model on the Amazon Review Dataset")
@@ -170,12 +171,17 @@ def handler_train(params, _):
     except:
         local_train_file = TRAIN_DATA_FILE
     
+    try:
+        reuse_trained_model = bool(params["reuse_trained_model"])
+    except:
+        reuse_trained_model = False
+        
     client = minio_client.MinIoClient(params["minio_endpoint"], 
                                     params["minio_access_key"], 
                                     params["minio_secret_key"])
 
 
-    if client.exists(output_model_object):
+    if reuse_trained_model == True and client.exists(output_model_object):
         print("> Model already exists!")
         return {"status" : "already existing",
                 "model_object_name" : output_model_object, 

@@ -54,7 +54,8 @@ SERVERLEDGE_CLI="${1:-../../../serverledge/bin/serverledge-cli}"
     --input "output_vectorizer_object:Text" \
     --output "status:Text" \
     --output "model_object_name:Text" \
-    --output "vectorizer_object_name:Text"
+    --output "vectorizer_object_name:Text" \
+    --output "reuse_trained_model:Bool"
 
 
 
