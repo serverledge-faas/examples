@@ -172,7 +172,7 @@ def handler_train(params, _):
         local_train_file = TRAIN_DATA_FILE
     
     try:
-        reuse_trained_model = bool(params["reuse_trained_model"])
+        reuse_trained_model = params["reuse_trained_model"].strip().lower() == "true"
     except:
         reuse_trained_model = False
         
