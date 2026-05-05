@@ -2,10 +2,10 @@
 
 SERVERLEDGE_CLI="${1:-../../../serverledge/bin/serverledge-cli}"
 
-"$SERVERLEDGE_CLI" create --function sa_retrieve \
+"$SERVERLEDGE_CLI" create --update --function sa_retrieve \
     --memory 256 \
     --runtime custom \
-    --custom_image sa-retrieve \
+    --custom_image matnar/sa-retrieve \
     --input "minio_endpoint:Text" \
     --input "minio_access_key:Text" \
     --input "minio_secret_key:Text" \
@@ -18,10 +18,10 @@ SERVERLEDGE_CLI="${1:-../../../serverledge/bin/serverledge-cli}"
     --output "object_name:Text"
 
 
-"$SERVERLEDGE_CLI" create --function sa_extract \
+"$SERVERLEDGE_CLI" create --update --function sa_extract \
     --memory 256 \
     --runtime custom \
-    --custom_image sa-extract \
+    --custom_image matnar/sa-extract \
     --input "minio_endpoint:Text" \
     --input "minio_access_key:Text" \
     --input "minio_secret_key:Text" \
@@ -37,10 +37,10 @@ SERVERLEDGE_CLI="${1:-../../../serverledge/bin/serverledge-cli}"
 
 
 
-"$SERVERLEDGE_CLI" create --function sa_train \
+"$SERVERLEDGE_CLI" create --update --function sa_train \
     --memory 1024 \
     --runtime custom \
-    --custom_image sa-train \
+    --custom_image matnar/sa-train \
     --input "minio_endpoint:Text" \
     --input "minio_access_key:Text" \
     --input "minio_secret_key:Text" \
@@ -52,17 +52,17 @@ SERVERLEDGE_CLI="${1:-../../../serverledge/bin/serverledge-cli}"
     --input "local_vectorizer_file:Text" \
     --input "output_model_object:Text" \
     --input "output_vectorizer_object:Text" \
+    --input "reuse_trained_model:Bool"
     --output "status:Text" \
     --output "model_object_name:Text" \
     --output "vectorizer_object_name:Text" \
-    --output "reuse_trained_model:Bool"
 
 
 
-"$SERVERLEDGE_CLI" create --function sa_evaluate \
+"$SERVERLEDGE_CLI" create --update --function sa_evaluate \
     --memory 512 \
     --runtime custom \
-    --custom_image sa-evaluate \
+    --custom_image matnar/sa-evaluate \
     --input "minio_endpoint:Text" \
     --input "minio_access_key:Text" \
     --input "minio_secret_key:Text" \
