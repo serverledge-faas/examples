@@ -68,8 +68,15 @@ def handler (params, context):
     #print("\nDaily data\n", daily_dataframe)
 
     response = {}
+    if "ai_report" in params:
+        response["ai_report"] = params["ai_report"]
+    else:
+        response["ai_report"] = False
     if "gemini_api_key" in params:
         response["gemini_api_key"] = params["gemini_api_key"]
+    else:
+        response["ai_report"] = False
+
     response["current_temperature"] = current_temperature_2m
     response["daily_max_temp"] = daily_max_temp
     response["daily_min_temp"] = daily_min_temp
