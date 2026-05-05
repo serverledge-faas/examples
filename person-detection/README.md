@@ -2,13 +2,9 @@
 
 The workflow takes a (base64-encoded) image, resizes it and uses YOLOv8 to
 detect people. If any person is detected, the corresponding region of the image
-is saved to a minIO bucket.
+is returned as a base64 string.
 
 ## Usage 
-
-Start minIO:
-
-    bash start-minio.sh
 
 Create custom images for functions:
 
@@ -27,7 +23,6 @@ Serverledge CLI executable):
 
     $CLI create -u -f cropFunc --memory 500 --runtime custom --custom_image cropfunc \
         --input "Img:Text" --input "Detections:ArrayText" --input "Count:Int" \
-        --input "minio_endpoint:Text" --input "minio_access_key:Text" --input "minio_secret_key:Text" \
             --output "Objects:ArrayText" 
 
     $CLI create-workflow -s workflow.json -f detection

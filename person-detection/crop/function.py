@@ -2,7 +2,6 @@ import base64
 import time
 import io
 from PIL import Image
-import minio_client
 
 
 def extract_person_crops(base64_string, person_bboxes, padding=0):
@@ -53,38 +52,6 @@ def extract_person_crops(base64_string, person_bboxes, padding=0):
     return cropped_images
 
 
-def save_person_crops(minio_conf, base64_string, person_bboxes, output_prefix="person", padding=0):
-    """
-    Extract and save cropped images for each person bounding box.
-    
-    Args:
-        base64_string (str): Base64-encoded image string
-        person_bboxes (list): List of bounding boxes
-        output_prefix (str): Prefix for output filenames (default: "person")
-        padding (int): Extra pixels to add around each crop (default: 0)
-    
-    Returns:
-        list: List of saved filenames
-    """
-    cropped_images = extract_person_crops(base64_string, person_bboxes, padding)
-
-    client = minio_client.MinIoClient(minio_conf["endpoint"], 
-                                      minio_conf["access_key"], 
-                                      minio_conf["secret_key"])
-                                        
-    client.ensure_bucket()
-    
-    saved_files = []
-    for i, crop in enumerate(cropped_images, 1):
-        filename = f"{output_prefix}_{i}.jpg"
-        crop.save(filename, quality=95)
-
-        object_name=str(time.time())+".jpg"
-        client.upload_file(filename, object_name)
-        saved_files.append(object_name)
-        print(f"Saved: {object_name}")
-    
-    return saved_files
 
 
 def handler (params, context):
@@ -99,13 +66,15 @@ def handler (params, context):
 
     response = {}
 
-    minio_conf = {}
-    minio_conf["endpoint"] = params["minio_endpoint"] 
-    minio_conf["access_key"] = params["minio_access_key"]
-    minio_conf["secret_key"] = params["minio_secret_key"]
+    cropped_images = extract_person_crops(img, boxes, 10)
+    encoded_images = []
+    for ci in cropped_images:
+        fmt = ci.format or "PNG"  # fallback to PNG if format is unknown
+        buffer = io.BytesIO()
+        ci.save(buffer, format=fmt)
+        b64_string = base64.b64encode(buffer.getvalue()).decode("utf-8")
+        encoded_images.append(b64_string)
 
-    objects = save_person_crops(minio_conf, img, boxes, output_prefix="person", padding=10)
-    
-    response["Objects"] = objects
+    response["Objects"] = encoded_images
 
     return response
